@@ -1,4 +1,5 @@
 import re
+import requests  # À mettre tout en haut du fichier avec tes autres imports
 from playwright.sync_api import Playwright, sync_playwright, expect
 
 
@@ -52,6 +53,19 @@ def run(playwright: Playwright) -> None:
     page1.get_by_test_id("results-hidden-routes-toggle").click()
     page1.get_by_test_id("results-heading-shift-date-left").click()
     page1.get_by_test_id("results-hidden-routes-toggle").click()
+
+    texte_du_prix = page1.locator(".price-value").first.inner_text()
+    prix_chiffre = int(''.join(filter(str.isdigit, texte_du_prix)))
+    
+    URL_WEBHOOK_DISCORD = "https://discord.com/api/webhooks/1521130897850503341/VMb9UhsWzikLUoXet2riHodMpTVA44XYhXWF35IpwNGJ5XF1g4c-1ZcFJRC1qxRSRctJ"
+
+    bilan_message = f"🚢 **Bilan Ferry France - Tunis** 🚢\n\nUn départ a été analysé ! Le prix actuel trouvé est de **{prix_chiffre} €**."
+
+    donnees = {
+        "content": bilan_message
+}
+
+    requests.post(URL_WEBHOOK_DISCORD, json=donnees)
 
     # ---------------------
     context.close()
