@@ -1,12 +1,14 @@
 name: Bilan Ferry Quotidien
 
 on:
-  workflow_dispatch: # <--- Cette ligne magique active le bouton gris "Run workflow" !
+  workflow_dispatch:   # Bouton manuel dans l'onglet Actions
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '0 6 * * *'   # 08h00 heure Paris (UTC+2)
+
 jobs:
   run-bot:
     runs-on: ubuntu-latest
+
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -16,10 +18,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Installer les outils (Playwright)
+      - name: Installer les dépendances
         run: |
           pip install playwright requests
           playwright install chromium
+          playwright install-deps chromium
 
       - name: Lancer le script de recherche
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: python script_ferry.py
