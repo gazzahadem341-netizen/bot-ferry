@@ -8,7 +8,15 @@ def run(playwright: Playwright) -> None:
     context = browser.new_context()
     page = context.new_page()
     page.goto("https://www.directferries.fr/")
-    page.get_by_role("button", name="Tout accepter").click()
+    try:
+        # On essaie de cliquer rapidement sur le bouton français ou anglais
+        page.get_by_role("button", name="Tout accepter").click(timeout=5000)
+    except Exception:
+        try:
+            page.get_by_role("button", name="Accept all").click(timeout=5000)
+        except Exception:
+            # Si aucun n'apparaît, on ignore et on passe à la suite
+            pass
     page.get_by_role("button", name="De").click()
     page.get_by_test_id("search-widget-outbound-popular-destination-port-result-FRMRS").click()
     page.get_by_test_id("home-search-widget-return-popup-port-field-input").click()
