@@ -1,0 +1,26 @@
+name: Bilan Ferry Quotidien
+
+on:
+  schedule:
+    # Se lance tous les jours à 08:00 UTC (soit 10:00 du matin en France en été)
+    - cron: '0 8 * * *'
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Installer les outils (Playwright)
+        run: |
+          pip install playwright requests
+          playwright install chromium
+
+      - name: Lancer le script de recherche
+        run: python script_ferry.py
