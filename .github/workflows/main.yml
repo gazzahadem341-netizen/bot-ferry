@@ -3,12 +3,6 @@ on:
   workflow_dispatch: # <--- Cette ligne magique active le bouton gris "Run workflow" !
   schedule:
     - cron: '0 8 * * *'
-
-on:
-  schedule:
-    # Se lance tous les jours à 08:00 UTC (soit 10:00 du matin en France en été)
-    - cron: '0 8 * * *'
-
 jobs:
   run-bot:
     runs-on: ubuntu-latest
