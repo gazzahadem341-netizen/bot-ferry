@@ -1,4 +1,5 @@
 name: Bilan Ferry Quotidien
+
 on:
   workflow_dispatch: # <--- Cette ligne magique active le bouton gris "Run workflow" !
   schedule:
